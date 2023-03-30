@@ -65,7 +65,7 @@ class Tomasz:
             
             self.typing(self.secret_message['words']['other'][i],m_s=1000,t='slow')
             
-            for i in self.progressbar(range(100), "Progress: ", 40):
+            for j in self.progressbar(range(100), "Progress: ", 40):
                 if random.uniform(1,100) < 3:
                     time.sleep(random.random())
                 time.sleep(0.07*random.random())
