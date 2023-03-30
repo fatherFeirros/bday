@@ -1,4 +1,4 @@
-import sys, time, random, requests, os
+import sys, time, random, requests, os, math
 
 class Tomasz:
     
@@ -22,16 +22,23 @@ class Tomasz:
         
         time.sleep(5)
     
-    def typing(self,m,m_s=100,t='fast'):
-        for i in m:
-            sys.stdout.write(chr(i) if type(i) == int else i)
-            sys.stdout.flush()
-            if t == 'slow':
+    def typing(self,m,m_s=100,t='fast',k=10):
+        if t == 'slow':
+            for i in m:
+                sys.stdout.write(chr(i) if type(i) == int else i)
+                sys.stdout.flush()
                 time.sleep(random.random() * random.uniform(1,10) / m_s)
-            else:
-                time.sleep(random.random() / m_s)
-        print("")
-                
+            print("")
+
+        else:
+            a = math.ceil(len(m)/k)
+            
+            for i in range(k):
+                for j in m[i*a:(i+1)*a]:
+                     sys.stdout.write(chr(j) if type(j) == int else j)
+                time.sleep(0.5)
+            print("")
+            
     def progressbar(self,it, prefix="", size=60, out=sys.stdout):
     
         count = len(it)
@@ -56,9 +63,11 @@ class Tomasz:
         
         for i in range(3):
             
-            self.typing(self.secret_message['words']['other'][i])
+            self.typing(self.secret_message['words']['other'][i],m_s=1000,t='slow')
             
             for i in self.progressbar(range(100), "Progress: ", 40):
+                if random.uniform(1,100) < 3:
+                    time.sleep(random.random())
                 time.sleep(0.07*random.random())
             
         print("Success!")
@@ -67,9 +76,23 @@ class Tomasz:
 
 if __name__ == "__main__":
     
-    with Tomasz() as ma_urodziny:
+    try:
         
-        ma_urodziny.hacker_time()
-        ma_urodziny.typing(ma_urodziny.secret_message['words']['start'],100,'slow')
-        ma_urodziny.typing(ma_urodziny.secret_message['cake'],1000)
-        ma_urodziny.typing(ma_urodziny.secret_message['words']['end'],100,'slow')
+        with Tomasz() as ma_urodziny:
+        
+            ma_urodziny.hacker_time()
+            ma_urodziny.typing(ma_urodziny.secret_message['words']['start'],100,'slow')
+            ma_urodziny.typing(ma_urodziny.secret_message['cake'])
+            ma_urodziny.typing(ma_urodziny.secret_message['words']['end'],100,'slow')
+    
+    except Exception as e:
+        
+        backup_msg = [78,111,32,99,111,115,32,110,105,101,32,112,121,107,108,
+                      111,32,58,80,32,90,100,114,111,119,105,97,32,105,32,112,
+                      105,101,110,105,101,100,122,121,32,109,111,114,100,101,
+                      99,122,107,111,33,33,33]
+        
+        print(e)
+        
+        for i in backup_msg:
+            sys.stdout.write(chr(i) if type(i) == int else i)
